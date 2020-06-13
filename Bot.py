@@ -28,6 +28,7 @@ except:
 
 #Bot will do some shits
 search = driver.find_element_by_xpath("/html/body/div[1]/div/div/div[3]/div/div[1]/div/label/div/div[2]")
-search.send_keys("Hello World")
+search.send_keys("Otaku Hub")
 search.send_keys(Keys.RETURN)
+driver.find_elements_by_name("Otaku Hub").click()
 
