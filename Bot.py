@@ -1,3 +1,7 @@
-import selenium
+from selenium import webdriver
+from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 
-print("Selenium Imported")
+PATH = "/home/somnathdas/Whatsapp-Botto/geckodriver"
+
+driver = webdriver.Firefox(executable_path=PATH)
+
