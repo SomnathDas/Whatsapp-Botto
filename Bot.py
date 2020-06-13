@@ -14,6 +14,12 @@ driver = webdriver.Firefox(executable_path=PATH) ##Add Your own executable path 
 #Bot will open the site
 driver.get("https://web.whatsapp.com")
 
+# Message that user wants to send
+text_message = "Hello World"
+
+#Group Or Contact Name to send message
+nawa = "Otaku Hub"
+
 #Bot will print out the login instructions by finding it on start page
 #instructions = driver.find_element_by_xpath("/html/body/div[1]/div/div/div[2]/div[1]/div/div[1]")
 #print(instructions.text)
@@ -29,13 +35,15 @@ except:
 
 #Bot will do some shits
 search = driver.find_element_by_xpath("/html/body/div[1]/div/div/div[3]/div/div[1]/div/label/div/div[2]")
-search.send_keys("Otaku Hub")
+search.send_keys(nawa)
+
 #so basically, this code below clicks on the topmost search result so the name we type is case-sensitive XD
 search.send_keys(Keys.RETURN)
+
 #driver.find_element_by_name("Otaku Hub").click()
 msg = driver.find_element_by_xpath("/html/body/div[1]/div/div/div[4]/div/footer/div[1]/div[2]/div/div[2]")
 msg.click() 
-msg.send_keys("Hello World")
+msg.send_keys(text_message)
 msg.send_keys(Keys.RETURN)
 print("Complete")
 
