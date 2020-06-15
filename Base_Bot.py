@@ -4,7 +4,9 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from bs4 import BeautifulSoup as bs
 import time
+import parser
 
 
 PATH = "/home/somnathdas/Whatsapp-Botto/geckodriver" #Add Your own executable path of web driver
@@ -15,13 +17,15 @@ driver = webdriver.Firefox(executable_path=PATH) ##Add Your own executable path 
 driver.get("https://web.whatsapp.com")
 
 # Message that user wants to send
-text_message = input("Enter the text message:\n")
+#text_message = input("Enter the text message:\n")
+text_message = "/Bot testing/"
 
 #Group Or Contact Name to send message
-Namae = input("Enter the name of contact or group:\n")
+#Namae = input("Enter the name of contact or group:\n")
+Namae = "Otaku Hub"
 
 #Printing Instructions
-print("!! Scan The QR Code in the opened window !! \n ")
+#print("!! Scan The QR Code in the opened window !! \n ")
 #We will add instruction on our own!!!!!!!! LATER
 
 #Bot will wait for user to scan the QR code
@@ -45,7 +49,9 @@ msg = driver.find_element_by_xpath("/html/body/div[1]/div/div/div[4]/div/footer/
 msg.click() 
 msg.send_keys(text_message)
 msg.send_keys(Keys.RETURN)
-
-print("Complete")
-
-
+driver.implicitly_wait(5)
+url = driver.page_source	
+soup = bs(url, "lxml")
+driver.implicitly_wait(14)
+getText = soup.find_all("span", class_="_3Whw5 selectable-text invisible-space copyable-text")
+print(getText)
