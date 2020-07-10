@@ -7,11 +7,16 @@ from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup as bs
 import time
 import parser
+import os
+import configparser
+from selenium.common.exceptions import NoSuchElementException
+from subprocess import call  
 
+Firefox_PATH = "/home/somnath/Whatsapp-Botto/geckodriver" #Add Your own executable path of web driver
+Chrome_PATH = "/home/somnath/Whatsapp-Botto/chromedriver"
 
-PATH = "/home/somnathdas/Whatsapp-Botto/geckodriver" #Add Your own executable path of web driver
-
-driver = webdriver.Firefox(executable_path=PATH) ##Add Your own executable path of web driver
+#driver = webdriver.Chrome(Chrome_PATH) #This is for chrome web driver!!
+driver = webdriver.Firefox(executable_path=Firefox_PATH) ##Add Your own executable path of web driver
 
 #Bot will open the site
 driver.get("https://web.whatsapp.com")
@@ -50,8 +55,59 @@ msg.click()
 msg.send_keys(text_message)
 msg.send_keys(Keys.RETURN)
 driver.implicitly_wait(5)
-url = driver.page_source	
-soup = bs(url, "lxml")
-driver.implicitly_wait(14)
-getText = soup.find_all("span", class_="_3Whw5 selectable-text invisible-space copyable-text")
-print(getText)
+
+
+def read_last_in_message(driver):
+    """
+    Reading the last message that you got in from the chatter
+    """
+    for messages in driver.find_elements_by_xpath("//div[contains(@class,'message-in')]"):
+        try:
+            message = ""
+            emojis = []
+
+            message_container = messages.find_element_by_xpath(".//div[@class='copyable-text']")
+
+            message = message_container.find_element_by_xpath(".//span[contains(@class,'selectable-text invisible-space copyable-text')]").text
+
+            for emoji in message_container.find_elements_by_xpath(".//img[contains(@class,'selectable-text invisible-space copyable-text')]"):
+                emojis.append(emoji.get_attribute("data-plain-text"))
+
+        except NoSuchElementException:  # In case there are only emojis in the message
+            try:
+                message = ""
+                emojis = []
+                message_container = messages.find_element_by_xpath(".//div[@class='copyable-text']")
+
+                for emoji in message_container.find_elements_by_xpath(".//img[contains(@class,'selectable-text invisible-space copyable-text')]"):
+                    emojis.append(emoji.get_attribute("data-plain-text"))
+            except NoSuchElementException:
+                pass
+
+    return message, emojis
+
+def main():
+    previous_in_message = None
+    while True:
+        last_in_message, emojis = read_last_in_message(driver)
+
+        if previous_in_message != last_in_message:
+            print(last_in_message, emojis)
+            previous_in_message = last_in_message
+
+            time.sleep(1)
+
+main()
+
+#url = driver.page_source	
+#soup = bs(url, "lxml")
+#driver.implicitly_wait(14)
+
+#div = []
+#text = []
+
+#div = soup.find_all("div", { "class" : "eRacY" })
+#print(div)
+#text = div.find("span", {"class" : "selectable-text invisible-space copyable-text"})
+#print(text)
+
