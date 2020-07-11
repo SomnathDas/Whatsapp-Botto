@@ -13,10 +13,10 @@ from selenium.common.exceptions import NoSuchElementException
 from subprocess import call  
 
 Firefox_PATH = "/home/somnath/Whatsapp-Botto/geckodriver" #Add Your own executable path of web driver
-Chrome_PATH = "/home/somnath/Whatsapp-Botto/chromedriver"
+Chrome_PATH = "/home/somnath/Whatsapp-Botto/chromedriver" #Add Your own executable path of web driver
 
 #driver = webdriver.Chrome(Chrome_PATH) #This is for chrome web driver!!
-driver = webdriver.Firefox(executable_path=Firefox_PATH) ##Add Your own executable path of web driver
+driver = webdriver.Firefox(executable_path=Firefox_PATH) 
 
 #Bot will open the site
 driver.get("https://web.whatsapp.com")
@@ -42,24 +42,28 @@ except:
     print("Timeout")
     driver.quit()
 
-#Bot will do some shits
+#so basically, this code below clicks on the topmost search result so the name we type is case-sensitive XD
+# You're getting my logic right XD!!
 search = driver.find_element_by_xpath("/html/body/div[1]/div/div/div[3]/div/div[1]/div/label/div/div[2]")
 search.send_keys(Namae)
-
-#so basically, this code below clicks on the topmost search result so the name we type is case-sensitive XD
 search.send_keys(Keys.RETURN)
 
 #driver.find_element_by_name("Otaku Hub").click()
+
+#This code will find the messsage box and click on it and then enter the text message
+# then press "RETURN OR Enter Key" to send the text
 msg = driver.find_element_by_xpath("/html/body/div[1]/div/div/div[4]/div/footer/div[1]/div[2]/div/div[2]")
 msg.click() 
 msg.send_keys(text_message)
 msg.send_keys(Keys.RETURN)
+#Implicitly waiting code below so we can avoid few problems!
 driver.implicitly_wait(5)
 
 
+#STILL IN DEVELOPMENT
 def read_last_in_message(driver):
     """
-    Reading the last message that you got in from the chatter
+    Reading the last message in chat : )
     """
     for messages in driver.find_elements_by_xpath("//div[contains(@class,'message-in')]"):
         try:
@@ -86,6 +90,7 @@ def read_last_in_message(driver):
 
     return message, emojis
 
+#STILL IN DEVELOPMENT
 def main():
     previous_in_message = None
     while True:
